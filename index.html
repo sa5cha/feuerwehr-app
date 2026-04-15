@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feuerwehr Einsatzsimulation</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #0f172a;
+    color: white;
+}
+
+header {
+    background: #1e293b;
+    padding: 15px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.container {
+    padding: 10px;
+}
+
+.card {
+    background: #1e293b;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+
+select, button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 5px;
+    font-size: 18px;
+    border-radius: 10px;
+    border: none;
+}
+
+button {
+    background: #dc2626;
+    color: white;
+    font-weight: bold;
+}
+
+#image {
+    width: 100%;
+    max-height: 55vh;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.timer {
+    text-align: center;
+    font-size: 26px;
+    margin-top: 10px;
+}
+</style>
+
+</head>
+<body>
+
+<header>Einsatzsimulation</header>
+
+<div class="container">
+
+<img id="image" src="">
+
+<div class="card">
+    <h3>Szenario</h3>
+    <select id="scenarioSelect">
+        <option value="s1">Wohnungsbrand</option>
+    </select>
+    <button onclick="loadScenario()">Laden</button>
+</div>
+
+<div class="card">
+    <h3>Ansicht</h3>
+    <select id="viewSelect"></select>
+    <button onclick="changeView()">Anzeigen</button>
+</div>
+
+<div class="card">
+    <h3>Eskalation</h3>
+    <select id="escalationSelect"></select>
+    <button onclick="triggerEscalation()">Start</button>
+</div>
+
+<div class="card">
+    <h3>Verlauf</h3>
+    <select id="flowSelect"></select>
+    <button onclick="changeFlow()">Setzen</button>
+</div>
+
+<div class="card">
+    <button onclick="goBack()">Zurück</button>
+    <button onclick="reset()">Reset</button>
+</div>
+
+<div class="timer" id="timer">⏱ 0 s</div>
+<button onclick="startTimer()">Timer starten</button>
+
+</div>
+
+<script>
+
+// Base64 Bilder (Beispiel – werden erweitert)
+const images = {
+start: "https://via.placeholder.com/800x500?text=Startlage",
+back: "https://via.placeholder.com/800x500?text=R%C3%BCckansicht",
+inside: "https://via.placeholder.com/800x500?text=Innenansicht",
+detail: "https://via.placeholder.com/800x500?text=Detail",
+escalation: "https://via.placeholder.com/800x500?text=Eskalation",
+critical: "https://via.placeholder.com/800x500?text=Kritisch"
+};
+
+const scenarios = {
+s1: {
+    start: "start",
+    views: {
+        "Startlage": "start",
+        "Rückansicht": "back",
+        "Innenansicht": "inside",
+        "Detail": "detail"
+    },
+    escalation: {
+        "Feuer nimmt zu": "escalation",
+        "Kritisch": "critical"
+    },
+    flow: {
+        "A stabil": "start",
+        "B kritisch": "inside",
+        "C eskalierend": "critical"
+    }
+}
+};
+
+let currentScenario = scenarios.s1;
+let history = [];
+let currentImage = "";
+let timerInterval;
+let time = 0;
+
+function loadScenario() {
+    currentImage = currentScenario.start;
+    showImage(currentImage);
+
+    updateDropdown("viewSelect", currentScenario.views);
+    updateDropdown("escalationSelect", currentScenario.escalation);
+    updateDropdown("flowSelect", currentScenario.flow);
+
+    history = [];
+}
+
+function updateDropdown(id, data) {
+    const select = document.getElementById(id);
+    select.innerHTML = "";
+    for (let key in data) {
+        let option = document.createElement("option");
+        option.text = key;
+        option.value = data[key];
+        select.add(option);
+    }
+}
+
+function showImage(key) {
+    document.getElementById("image").src = images[key];
+}
+
+function changeView() {
+    setImage(document.getElementById("viewSelect").value);
+}
+
+function triggerEscalation() {
+    setImage(document.getElementById("escalationSelect").value);
+}
+
+function changeFlow() {
+    setImage(document.getElementById("flowSelect").value);
+}
+
+function setImage(key) {
+    history.push(currentImage);
+    currentImage = key;
+    showImage(key);
+}
+
+function goBack() {
+    if (history.length > 0) {
+        currentImage = history.pop();
+        showImage(currentImage);
+    }
+}
+
+function reset() {
+    loadScenario();
+    time = 0;
+    document.getElementById("timer").innerText = "⏱ 0 s";
+}
+
+function startTimer() {
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        time++;
+        document.getElementById("timer").innerText = "⏱ " + time + " s";
+    }, 1000);
+}
+
+loadScenario();
+
+</script>
+
+</body>
+</html>
