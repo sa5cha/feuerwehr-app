@@ -79,4 +79,72 @@ fill("escalation", s.escalation);
 
 function fill(id, data){
 let el = document.getElementById(id);
-el
+el.innerHTML = "";
+for(let k in data){
+let o = document.createElement("option");
+o.text = k;
+o.value = data[k];
+el.add(o);
+}
+}
+
+function setView(){
+localStorage.setItem("image", document.getElementById("view").value);
+localStorage.setItem("update", Date.now());
+}
+
+function setEscalation(){
+localStorage.setItem("image", document.getElementById("escalation").value);
+localStorage.setItem("update", Date.now());
+}
+
+// 🔥 Zufallsantworten
+
+const responses = {
+person: [
+"Bewohner: Alle Personen haben das Gebäude verlassen.",
+"Bewohner: Eine Person wird im Keller vermisst.",
+"Nachbar: Starker Rauch aus dem Keller bemerkt.",
+"Bewohner: Gasflasche im Keller gelagert."
+],
+access: [
+"Hintereingang ist verschlossen.",
+"Kellerfenster steht leicht offen.",
+"Seitlicher Zugang möglich.",
+"Zugang durch Garage möglich."
+]
+};
+
+// 🔁 Anfrage verarbeiten
+
+setInterval(() => {
+let req = localStorage.getItem("request");
+
+if(req){
+
+let answer = "Keine eindeutige Information";
+
+if(req.toLowerCase().includes("person")){
+answer = responses.person[Math.floor(Math.random()*responses.person.length)];
+}
+
+if(req.toLowerCase().includes("rück") || req.toLowerCase().includes("hinten")){
+answer = "Trainer kann Rückansicht freigeben";
+}
+
+if(req.toLowerCase().includes("zugang") || req.toLowerCase().includes("tür")){
+answer = responses.access[Math.floor(Math.random()*responses.access.length)];
+}
+
+document.getElementById("requestBox").innerText =
+"Anfrage: " + req + "\nAntwort: " + answer;
+
+localStorage.removeItem("request");
+}
+
+}, 500);
+
+</script>
+
+</body>
+</html>
