@@ -28,7 +28,13 @@ button, select { padding:15px; margin:10px; font-size:18px; width:90%; max-width
 <select id="escalation"></select>
 <button onclick="setEscalation()">Eskalation</button>
 
+<!-- ✅ HIER RICHTIG PLATZIERT -->
+<h3>Anfrage Teilnehmer</h3>
+<div id="requestBox" style="background:white;color:black;padding:10px;"></div>
+
 <script>
+
+// Szenarien
 
 const scenarios = {
 
@@ -60,6 +66,8 @@ escalation: {
 
 };
 
+// Funktionen
+
 function loadScenario(){
 let s = scenarios[document.getElementById("scenario").value];
 
@@ -87,18 +95,50 @@ localStorage.setItem("image", document.getElementById("view").value);
 function setEscalation(){
 localStorage.setItem("image", document.getElementById("escalation").value);
 }
-<h3>Anfrage Teilnehmer</h3>
-<div id="requestBox" style="background:white;color:black;padding:10px;"></div>
 
-<script>
+// 🔥 AUTOMATIK + ZUFALL
+
+const responses = {
+person: [
+"Bewohner: Alle Personen haben das Gebäude verlassen.",
+"Bewohner: Eine Person wird im Keller vermisst.",
+"Nachbar: Starker Rauch aus dem Keller bemerkt.",
+"Bewohner: Gasflasche im Keller gelagert."
+],
+access: [
+"Hintereingang ist verschlossen.",
+"Kellerfenster steht leicht offen.",
+"Seitlicher Zugang möglich.",
+"Zugang durch Garage möglich."
+]
+};
 
 setInterval(() => {
 let req = localStorage.getItem("request");
-if(req){
-document.getElementById("requestBox").innerText = req;
-}
-}, 500);
 
+if(req){
+
+let answer = "Keine eindeutige Information";
+
+if(req.toLowerCase().includes("person")){
+answer = responses.person[Math.floor(Math.random()*responses.person.length)];
+}
+
+if(req.toLowerCase().includes("rück") || req.toLowerCase().includes("hinten")){
+answer = "Trainer kann Rückansicht freigeben";
+}
+
+if(req.toLowerCase().includes("zugang") || req.toLowerCase().includes("tür")){
+answer = responses.access[Math.floor(Math.random()*responses.access.length)];
+}
+
+document.getElementById("requestBox").innerText =
+"Anfrage: " + req + "\nAntwort: " + answer;
+
+localStorage.removeItem("request");
+}
+
+}, 500);
 
 </script>
 
