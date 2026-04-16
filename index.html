@@ -17,7 +17,7 @@ body {
 
 img {
     width:100%;
-    height:70vh;
+    height:75vh;
     object-fit:cover;
 }
 
@@ -48,22 +48,27 @@ button {
 <img id="img" src="">
 
 <div class="inputBox">
-<input id="input" placeholder="z.B. Rückansicht / Person / Zugang">
-<button onclick="send()">Anfrage senden</button>
+<input id="input">
+<button onclick="send()">Senden</button>
 </div>
 
 <script>
 
-// 🔄 Bild automatisch aktualisieren
-function update(){
-let img = localStorage.getItem("image");
+// 🔄 Bild-Update erkennen
 
-if(img){
-document.getElementById("img").src = img;
+let lastUpdate = 0;
+
+setInterval(() => {
+let update = localStorage.getItem("update");
+
+if(update && update != lastUpdate){
+lastUpdate = update;
+document.getElementById("img").src = localStorage.getItem("image");
 }
-}
+}, 500);
 
 // 📩 Anfrage senden
+
 function send(){
 let txt = document.getElementById("input").value;
 
@@ -73,9 +78,6 @@ localStorage.setItem("request", txt);
 
 document.getElementById("input").value = "";
 }
-
-// 🔁 alle 0,5 Sekunden aktualisieren
-setInterval(update, 500);
 
 </script>
 
