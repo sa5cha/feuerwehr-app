@@ -87,6 +87,18 @@ localStorage.setItem("image", document.getElementById("view").value);
 function setEscalation(){
 localStorage.setItem("image", document.getElementById("escalation").value);
 }
+<h3>Anfrage Teilnehmer</h3>
+<div id="requestBox" style="background:white;color:black;padding:10px;"></div>
+
+<script>
+
+setInterval(() => {
+let req = localStorage.getItem("request");
+if(req){
+document.getElementById("requestBox").innerText = req;
+}
+}, 500);
+
 
 </script>
 
