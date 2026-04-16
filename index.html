@@ -5,8 +5,11 @@
 <title>Teilnehmer</title>
 
 <style>
-body { margin:0; background:black;}
-img { width:100%; height:100vh; object-fit:cover;}
+body { margin:0; background:black; color:white; font-family:Arial;}
+img { width:100%; height:70vh; object-fit:cover;}
+input, button {
+width:90%; margin:5px; padding:15px; font-size:18px;
+}
 </style>
 
 </head>
@@ -14,10 +17,21 @@ img { width:100%; height:100vh; object-fit:cover;}
 
 <img id="img" src="">
 
+<div style="text-align:center;">
+<input id="input" placeholder="z.B. Rückansicht / Person befragen">
+<button onclick="send()">Senden</button>
+</div>
+
 <script>
 
 function update(){
 document.getElementById("img").src = localStorage.getItem("image");
+}
+
+function send(){
+let txt = document.getElementById("input").value;
+localStorage.setItem("request", txt);
+document.getElementById("input").value = "";
 }
 
 setInterval(update, 500);
