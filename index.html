@@ -5,10 +5,40 @@
 <title>Teilnehmer</title>
 
 <style>
-body { margin:0; background:black; color:white; font-family:Arial;}
-img { width:100%; height:70vh; object-fit:cover;}
+body {
+    margin:0;
+    background:black;
+    color:white;
+    font-family:Arial;
+    display:flex;
+    flex-direction:column;
+    height:100vh;
+}
+
+img {
+    width:100%;
+    height:70vh;
+    object-fit:cover;
+}
+
+.inputBox {
+    padding:10px;
+    background:#111;
+}
+
 input, button {
-width:90%; margin:5px; padding:15px; font-size:18px;
+    width:100%;
+    padding:15px;
+    margin-top:5px;
+    font-size:18px;
+    border:none;
+    border-radius:8px;
+}
+
+button {
+    background:#dc2626;
+    color:white;
+    font-weight:bold;
 }
 </style>
 
@@ -17,23 +47,34 @@ width:90%; margin:5px; padding:15px; font-size:18px;
 
 <img id="img" src="">
 
-<div style="text-align:center;">
-<input id="input" placeholder="z.B. Rückansicht / Person befragen">
-<button onclick="send()">Senden</button>
+<div class="inputBox">
+<input id="input" placeholder="z.B. Rückansicht / Person / Zugang">
+<button onclick="send()">Anfrage senden</button>
 </div>
 
 <script>
 
+// 🔄 Bild automatisch aktualisieren
 function update(){
-document.getElementById("img").src = localStorage.getItem("image");
+let img = localStorage.getItem("image");
+
+if(img){
+document.getElementById("img").src = img;
+}
 }
 
+// 📩 Anfrage senden
 function send(){
 let txt = document.getElementById("input").value;
+
+if(txt.trim() !== ""){
 localStorage.setItem("request", txt);
+}
+
 document.getElementById("input").value = "";
 }
 
+// 🔁 alle 0,5 Sekunden aktualisieren
 setInterval(update, 500);
 
 </script>
