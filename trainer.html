@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Trainer</title>
+
+<style>
+body { font-family: Arial; background:#0f172a; color:white; text-align:center;}
+button, select { padding:15px; margin:10px; font-size:18px; width:90%; max-width:400px;}
+</style>
+</head>
+<body>
+
+<h2>Trainer Steuerung</h2>
+
+<select id="scenario">
+<option value="s1">Wohnungsbrand</option>
+<option value="s2">Kellerbrand</option>
+</select>
+
+<button onclick="loadScenario()">Szenario laden</button>
+
+<br>
+
+<select id="view"></select>
+<button onclick="setView()">Ansicht</button>
+
+<select id="escalation"></select>
+<button onclick="setEscalation()">Eskalation</button>
+
+<script>
+
+const scenarios = {
+
+s1: {
+start: "https://images.unsplash.com/photo-1560185127-6ed189bf02f4",
+views: {
+"Start": "https://images.unsplash.com/photo-1560185127-6ed189bf02f4",
+"Rückseite": "https://images.unsplash.com/photo-1507089947368-19c1da9775ae",
+"Innen": "https://images.unsplash.com/photo-1600585152915-d208bec867a1"
+},
+escalation: {
+"Rauch nimmt zu": "https://images.unsplash.com/photo-1519681393784-d120267933ba",
+"Kritisch": "https://images.unsplash.com/photo-1501594907352-04cda38ebc29"
+}
+},
+
+s2: {
+start: "https://images.unsplash.com/photo-1581578731548-c64695cc6952",
+views: {
+"Start": "https://images.unsplash.com/photo-1581578731548-c64695cc6952",
+"Kellerzugang": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
+"Innen": "https://images.unsplash.com/photo-1599423300746-b62533397364"
+},
+escalation: {
+"Rauch verdichtet sich": "https://images.unsplash.com/photo-1600679472829-3044539ce8ed",
+"Flashover": "https://images.unsplash.com/photo-1604014238170-4def1e4e6b3f"
+}
+}
+
+};
+
+function loadScenario(){
+let s = scenarios[document.getElementById("scenario").value];
+
+localStorage.setItem("image", s.start);
+
+fill("view", s.views);
+fill("escalation", s.escalation);
+}
+
+function fill(id, data){
+let el = document.getElementById(id);
+el.innerHTML = "";
+for(let k in data){
+let o = document.createElement("option");
+o.text = k;
+o.value = data[k];
+el.add(o);
+}
+}
+
+function setView(){
+localStorage.setItem("image", document.getElementById("view").value);
+}
+
+function setEscalation(){
+localStorage.setItem("image", document.getElementById("escalation").value);
+}
+
+</script>
+
+</body>
+</html>
